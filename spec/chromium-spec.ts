@@ -100,7 +100,7 @@ describe('window.postMessage', () => {
 
 // Tests disabled due to regression in Chromium upgrade
 // https://github.com/electron/electron/issues/45322
-ifdescribe(!(process.platform === 'win32' && process.arch === 'ia32'))('focus handling', () => {
+describe('focus handling', () => {
   let webviewContents: WebContents;
   let w: BrowserWindow;
 
@@ -130,6 +130,7 @@ ifdescribe(!(process.platform === 'win32' && process.arch === 'ia32'))('focus ha
 
   const expectFocusChange = async () => {
     const [, focusedElementId] = await once(ipcMain, 'focus-changed');
+    console.log(`GOT FOCUS CHANGED IPC FOR: ${focusedElementId}`);
     return focusedElementId;
   };
 

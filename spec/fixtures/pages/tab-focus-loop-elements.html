@@ -10,6 +10,7 @@
       if (event.target.tagName && event.target.tagName !== 'WEBVIEW') {
         const elementId = event.target.id ? `-${event.target.id}` : ''
         const elementIdentifier = `${event.target.tagName}${elementId}`
+        console.log(`In RENDERER HANDLE FOCUS CHANGE, focus changed for ${elementIdentifier}`)
         ipcRenderer.send('focus-changed', elementIdentifier)
       }
     }
