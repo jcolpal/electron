@@ -184,31 +184,37 @@ describe('focus handling', () => {
       let focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       let focusedElementId = await focusChange;
+      console.log(`previous focusable item1: ${focusedElementId}`);
       expect(focusedElementId).to.equal('BUTTON-element-3', `should start focused in element-3, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
+      console.log(`previous focusable item2: ${focusedElementId}`);
       expect(focusedElementId).to.equal('BUTTON-wv-element-2', `focus should've moved to the webview's element-2, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       webviewContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
+      console.log(`previous focusable item3: ${focusedElementId}`);
       expect(focusedElementId).to.equal('BUTTON-wv-element-1', `focus should've moved to the webview's element-1, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       webviewContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
+      console.log(`previous focusable item4: ${focusedElementId}`);
       expect(focusedElementId).to.equal('BUTTON-element-2', `focus should've moved to element-2, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
+      console.log(`previous focusable item5: ${focusedElementId}`);
       expect(focusedElementId).to.equal('BUTTON-element-1', `focus should've moved to element-1, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
+      console.log(`previous focusable item6: ${focusedElementId}`);
       expect(focusedElementId).to.equal('BUTTON-element-3', `focus should've looped back to element-3, it's instead in ${focusedElementId}`);
     });
   });

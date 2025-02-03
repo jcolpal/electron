@@ -15,6 +15,7 @@
         if (event.target.tagName) {
           const elementId = event.target.id ? `-${event.target.id}` : ''
           const elementIdentifier = `${event.target.tagName}${elementId}`
+          console.log(`In WV RENDERER HANDLE FOCUS CHANGE, focus changed for ${elementIdentifier}`)
           ipcRenderer.send('focus-changed', elementIdentifier)
         }
       }
