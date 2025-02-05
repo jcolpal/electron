@@ -2,7 +2,6 @@ import { systemPreferences } from 'electron/main';
 
 import { expect } from 'chai';
 
-import { expectDeprecationMessages } from './lib/deprecate-helpers';
 import { ifdescribe } from './lib/spec-helpers';
 
 describe('systemPreferences module', () => {
@@ -58,11 +57,6 @@ describe('systemPreferences module', () => {
         }).to.throw('Error processing argument at index 0, conversion failure from ');
       }
     });
-  });
-
-  ifdescribe(process.platform === 'win32')('systemPreferences.isAeroGlassEnabled()', () => {
-    expect(systemPreferences.isAeroGlassEnabled()).to.equal(true);
-    expectDeprecationMessages(() => systemPreferences.isAeroGlassEnabled(), '\'systemPreferences.isAeroGlassEnabled\' is deprecated and will be removed.');
   });
 
   ifdescribe(process.platform === 'darwin')('systemPreferences.getUserDefault(key, type)', () => {
