@@ -109,6 +109,7 @@ describe('focus handling', () => {
   beforeEach(async () => {
     screenCapture = new ScreenCapture();
     w = new BrowserWindow({
+      alwaysOnTop: true,
       show: true,
       webPreferences: {
         nodeIntegration: true,
