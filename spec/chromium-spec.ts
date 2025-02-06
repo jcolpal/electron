@@ -104,11 +104,10 @@ describe('window.postMessage', () => {
 describe('focus handling', () => {
   let webviewContents: WebContents;
   let w: BrowserWindow;
+  let screenCapture: ScreenCapture;
 
   beforeEach(async () => {
-    const screenCapture = new ScreenCapture();
-    const screenShot = await screenCapture.takeScreenshot('focus');
-    console.log(`Took focus screenshot at: ${screenShot}`);
+    screenCapture = new ScreenCapture();
     w = new BrowserWindow({
       show: true,
       webPreferences: {
@@ -130,7 +129,13 @@ describe('focus handling', () => {
     webviewContents = null as unknown as WebContents;
     w.destroy();
     w = null as unknown as BrowserWindow;
+    screenCapture = null as unknown as ScreenCapture;
   });
+
+  const takeScreenshot = async (name: string) => {
+    const screenShot = await screenCapture.takeScreenshot(name);
+    console.log(`Took focus screenshot at: ${screenShot}`);
+  };
 
   const expectFocusChange = async () => {
     const [, focusedElementId] = await once(ipcMain, 'focus-changed');
@@ -146,34 +151,41 @@ describe('focus handling', () => {
 
     it('moves focus to the next focusable item', async function () {
       this.retries(1);
+      takeScreenshot('focus1');
       let focusChange = expectFocusChange();
       w.webContents.sendInputEvent(tabPressEvent);
       let focusedElementId = await focusChange;
+      takeScreenshot('focus2');
       expect(focusedElementId).to.equal('BUTTON-element-1', `should start focused in element-1, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(tabPressEvent);
       focusedElementId = await focusChange;
+      takeScreenshot('focus3');
       expect(focusedElementId).to.equal('BUTTON-element-2', `focus should've moved to element-2, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(tabPressEvent);
       focusedElementId = await focusChange;
+      takeScreenshot('focus4');
       expect(focusedElementId).to.equal('BUTTON-wv-element-1', `focus should've moved to the webview's element-1, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       webviewContents.sendInputEvent(tabPressEvent);
       focusedElementId = await focusChange;
+      takeScreenshot('focus5');
       expect(focusedElementId).to.equal('BUTTON-wv-element-2', `focus should've moved to the webview's element-2, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       webviewContents.sendInputEvent(tabPressEvent);
       focusedElementId = await focusChange;
+      takeScreenshot('focus6');
       expect(focusedElementId).to.equal('BUTTON-element-3', `focus should've moved to element-3, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(tabPressEvent);
       focusedElementId = await focusChange;
+      takeScreenshot('focus7');
       expect(focusedElementId).to.equal('BUTTON-element-1', `focus should've looped back to element-1, it's instead in ${focusedElementId}`);
     });
   });
@@ -187,40 +199,47 @@ describe('focus handling', () => {
 
     it('moves focus to the previous focusable item', async function () {
       this.retries(1);
+      takeScreenshot('prevfocus1');
       let focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       let focusedElementId = await focusChange;
       console.log(`previous focusable item1: ${focusedElementId}`);
+      takeScreenshot('prevfocus2');
       expect(focusedElementId).to.equal('BUTTON-element-3', `should start focused in element-3, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
       console.log(`previous focusable item2: ${focusedElementId}`);
+      takeScreenshot('prevfocus3');
       expect(focusedElementId).to.equal('BUTTON-wv-element-2', `focus should've moved to the webview's element-2, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       webviewContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
       console.log(`previous focusable item3: ${focusedElementId}`);
+      takeScreenshot('prevfocus4');
       expect(focusedElementId).to.equal('BUTTON-wv-element-1', `focus should've moved to the webview's element-1, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       webviewContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
       console.log(`previous focusable item4: ${focusedElementId}`);
+      takeScreenshot('prevfocus5');
       expect(focusedElementId).to.equal('BUTTON-element-2', `focus should've moved to element-2, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
       console.log(`previous focusable item5: ${focusedElementId}`);
+      takeScreenshot('prevfocus6');
       expect(focusedElementId).to.equal('BUTTON-element-1', `focus should've moved to element-1, it's instead in ${focusedElementId}`);
 
       focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       focusedElementId = await focusChange;
       console.log(`previous focusable item6: ${focusedElementId}`);
+      takeScreenshot('prevfocus7');
       expect(focusedElementId).to.equal('BUTTON-element-3', `focus should've looped back to element-3, it's instead in ${focusedElementId}`);
     });
   });
