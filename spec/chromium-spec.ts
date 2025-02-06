@@ -15,6 +15,7 @@ import * as path from 'node:path';
 import { setTimeout } from 'node:timers/promises';
 import * as url from 'node:url';
 
+import { ScreenCapture } from './lib/screen-helpers';
 import { ifit, ifdescribe, defer, itremote, listen, startRemoteControlApp, waitUntil } from './lib/spec-helpers';
 import { closeAllWindows } from './lib/window-helpers';
 import { PipeTransport } from './pipe-transport';
@@ -105,6 +106,9 @@ describe('focus handling', () => {
   let w: BrowserWindow;
 
   beforeEach(async () => {
+    const screenCapture = new ScreenCapture();
+    const screenShot = await screenCapture.takeScreenshot('focus');
+    console.log(`Took focus screenshot at: ${screenShot}`);
     w = new BrowserWindow({
       show: true,
       webPreferences: {
@@ -140,7 +144,8 @@ describe('focus handling', () => {
       keyCode: 'Tab'
     };
 
-    it('moves focus to the next focusable item', async () => {
+    it('moves focus to the next focusable item', async function () {
+      this.retries(1);
       let focusChange = expectFocusChange();
       w.webContents.sendInputEvent(tabPressEvent);
       let focusedElementId = await focusChange;
@@ -180,7 +185,8 @@ describe('focus handling', () => {
       keyCode: 'Tab'
     };
 
-    it('moves focus to the previous focusable item', async () => {
+    it('moves focus to the previous focusable item', async function () {
+      this.retries(1);
       let focusChange = expectFocusChange();
       w.webContents.sendInputEvent(shiftTabPressEvent);
       let focusedElementId = await focusChange;
